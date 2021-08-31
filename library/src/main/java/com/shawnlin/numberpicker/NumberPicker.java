@@ -1018,18 +1018,14 @@ public class NumberPicker extends LinearLayout {
                 mFlingScroller.forceFinished(true);
                 mAdjustScroller.forceFinished(true);
                 onScrollerFinished(mAdjustScroller);
-            } else if (mLastDownEventX >= mLeftDividerLeft
-                    && mLastDownEventX <= mRightDividerRight) {
-                if (mOnClickListener != null) {
-                    mOnClickListener.onClick(this);
-                }
             } else if (mLastDownEventX < mLeftDividerLeft) {
                 postChangeCurrentByOneFromLongPress(false);
             } else if (mLastDownEventX > mRightDividerRight) {
                 postChangeCurrentByOneFromLongPress(true);
             }
         } else {
-            mLastDownOrMoveEventY = mLastDownEventY = event.getY();
+            mLastDownOrMoveEventY = mLastDownEventY;
+            mLastDownEventY = event.getY();
             if (!mFlingScroller.isFinished()) {
                 mFlingScroller.forceFinished(true);
                 mAdjustScroller.forceFinished(true);
@@ -1037,11 +1033,6 @@ public class NumberPicker extends LinearLayout {
             } else if (!mAdjustScroller.isFinished()) {
                 mFlingScroller.forceFinished(true);
                 mAdjustScroller.forceFinished(true);
-            } else if (mLastDownEventY >= mTopDividerTop
-                    && mLastDownEventY <= mBottomDividerBottom) {
-                if (mOnClickListener != null) {
-                    mOnClickListener.onClick(this);
-                }
             } else if (mLastDownEventY < mTopDividerTop) {
                 postChangeCurrentByOneFromLongPress(false);
             } else if (mLastDownEventY > mBottomDividerBottom) {
@@ -1118,6 +1109,9 @@ public class NumberPicker extends LinearLayout {
                                 changeValueByOne(false);
                             } else {
                                 ensureScrollWheelAdjusted();
+                                if (mOnClickListener != null) {
+                                    mOnClickListener.onClick(this);
+                                }
                             }
                         } else {
                             ensureScrollWheelAdjusted();
@@ -1141,6 +1135,9 @@ public class NumberPicker extends LinearLayout {
                                 changeValueByOne(false);
                             } else {
                                 ensureScrollWheelAdjusted();
+                                if (mOnClickListener != null) {
+                                    mOnClickListener.onClick(this);
+                                }
                             }
                         } else {
                             ensureScrollWheelAdjusted();
@@ -1148,6 +1145,7 @@ public class NumberPicker extends LinearLayout {
                         onScrollStateChange(OnScrollListener.SCROLL_STATE_IDLE);
                     }
                 }
+
                 mVelocityTracker.recycle();
                 mVelocityTracker = null;
             }
